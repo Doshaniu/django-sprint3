@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from .models import Post, Category
+from .constants import POST_LIMIT_ON_PAGE
+from .models import Category, Post
 
 
 def index(request):
@@ -11,7 +12,7 @@ def index(request):
         is_published=True,
         category__is_published=True,
         pub_date__lte=timezone.now()
-    ).order_by('-pub_date')[0:5]
+    )[:POST_LIMIT_ON_PAGE]
     context = {'posts': posts}
     return render(request, template_name, context)
 
@@ -38,7 +39,7 @@ def category_posts(request, category_slug):
         slug=category_slug,
         is_published=True
     )
-    post_list = Post.objects.filter(
+    post_list = category.posts.filter(
         category=category,
         is_published=True,
         category__is_published=True,

@@ -3,7 +3,10 @@ from django.contrib import admin
 from .models import Category, Location, Post
 
 
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
+    """Более гибкая и удобная админка для управления сайтом."""
+
     list_display = (
         'title',
         'pub_date',
@@ -21,6 +24,5 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
 
 
-admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Location)
